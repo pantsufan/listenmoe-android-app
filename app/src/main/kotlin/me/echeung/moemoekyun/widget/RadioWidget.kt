@@ -42,11 +42,6 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
-import coil3.imageLoader
-import coil3.request.ImageRequest
-import coil3.request.SuccessResult
-import coil3.request.allowHardware
-import coil3.toBitmap
 import me.echeung.moemoekyun.R
 import me.echeung.moemoekyun.client.api.Station
 import me.echeung.moemoekyun.ui.theme.ColorJpopPrimary
@@ -249,13 +244,4 @@ class RadioWidget : GlanceAppWidget() {
     }
 }
 
-private suspend fun loadAlbumArt(context: Context, url: String?): Bitmap? {
-    if (url == null) return null
-    return try {
-        val request = ImageRequest.Builder(context).data(url).allowHardware(false).build()
-        val result = context.imageLoader.execute(request)
-        (result as? SuccessResult)?.image?.toBitmap()
-    } catch (_: Exception) {
-        null
-    }
-}
+private suspend fun loadAlbumArt(context: Context, url: String?): Bitmap? = null

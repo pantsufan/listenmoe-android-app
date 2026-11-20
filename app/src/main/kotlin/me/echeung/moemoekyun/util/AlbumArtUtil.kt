@@ -13,12 +13,6 @@ import androidx.palette.graphics.Target.LIGHT_VIBRANT
 import androidx.palette.graphics.Target.MUTED
 import androidx.palette.graphics.Target.VIBRANT
 import androidx.palette.graphics.get
-import coil3.imageLoader
-import coil3.request.ImageRequest
-import coil3.request.SuccessResult
-import coil3.request.allowHardware
-import coil3.size.Scale
-import coil3.toBitmap
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -87,22 +81,7 @@ class AlbumArtUtil @Inject constructor(
     }
 
     private suspend fun getAlbumArtBitmap(url: String?): Bitmap = withIOContext {
-        if (url == null) {
-            return@withIOContext defaultAlbumArt
-        }
-
-        val request = ImageRequest.Builder(context)
-            .data(url)
-            .scale(Scale.FILL)
-            .allowHardware(false) // Required for Palette
-            .build()
-
-        val result = context.imageLoader.execute(request)
-        if (result !is SuccessResult) {
-            return@withIOContext defaultAlbumArt
-        }
-
-        result.image.toBitmap()
+        defaultAlbumArt
     }
 
     private suspend fun extractAccentColor(resource: Bitmap): Int? = withIOContext {

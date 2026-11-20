@@ -20,7 +20,7 @@ class SongConverter @Inject constructor(private val preferenceUtil: PreferenceUt
         sources = song.sources?.toDomainSong(),
         duration = song.duration(),
         durationSeconds = song.duration.toLong(),
-        albumArtUrl = song.albumArtUrl(),
+        albumArtUrl = null,
         favorited = song.favorite,
         favoritedAtEpoch = song.favoritedAt,
     )
@@ -37,15 +37,4 @@ class SongConverter @Inject constructor(private val preferenceUtil: PreferenceUt
         .joinToString()
 
     private fun Song.duration(): String = duration.toLong().formatDuration()
-
-    private fun Song.albumArtUrl(): String? {
-        val album = albums?.firstOrNull { it.image != null }
-        if (album != null) {
-            return "$CDN_ALBUM_ART_URL/${album.image}"
-        }
-
-        return null
-    }
 }
-
-private const val CDN_ALBUM_ART_URL = "https://cdn.listen.moe/covers"

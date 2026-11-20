@@ -145,5 +145,5 @@ data class RadioState(
     val event: Event? = null,
 ) {
     val albumArtUrl: String?
-        get() = currentSong?.albumArtUrl ?: event?.image
+        get() = null
 }

@@ -108,7 +108,13 @@ class RankingsScreenModel @Inject constructor(
     private fun ChartEntityEntry.toRankingEntity(kind: EntityKind): RankingEntity {
         val preferRomaji = preferenceUtil.shouldPreferRomaji().get()
         val name = (if (preferRomaji) entity.nameRomaji ?: entity.name else entity.name).orEmpty()
-        val imageUrl = entity.image?.let { "https://cdn.listen.moe/${kind.cdnPath}/$it" }
+        val imageUrl = if (kind ==
+            EntityKind.ALBUMS
+        ) {
+            null
+        } else {
+            entity.image?.let { "https://cdn.listen.moe/${kind.cdnPath}/$it" }
+        }
         return RankingEntity(
             rank = rank,
             name = name,
