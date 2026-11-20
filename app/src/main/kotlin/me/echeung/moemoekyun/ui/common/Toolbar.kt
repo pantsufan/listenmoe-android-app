@@ -1,20 +1,29 @@
 package me.echeung.moemoekyun.ui.common
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.TextFieldDefaults.textFieldColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -32,9 +41,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.dp
 import me.echeung.moemoekyun.R
 
 @Composable
@@ -108,56 +116,70 @@ fun SearchTextInput(query: String?, modifier: Modifier = Modifier, onQueryChange
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
 
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
+    Surface(
+        modifier = modifier.height(42.dp),
+        shape = RoundedCornerShape(21.dp),
+        color = Color(0xFF1E212B),
+        border = BorderStroke(1.dp, Color(0xFF383C4A)),
     ) {
-        BasicTextField(
-            value = query ?: "",
-            onValueChange = onQueryChange,
+        Row(
             modifier = Modifier
-                .weight(1f)
-                .focusRequester(focusRequester),
-            textStyle = MaterialTheme.typography.titleMedium.copy(
-                color = MaterialTheme.colorScheme.onBackground,
-                fontWeight = FontWeight.Normal,
-                fontSize = 18.sp,
-            ),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-            keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
-            singleLine = true,
-            cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
-            decorationBox = { innerTextField ->
-                TextFieldDefaults.TextFieldDecorationBox(
-                    value = query ?: "",
-                    innerTextField = innerTextField,
-                    enabled = true,
-                    singleLine = true,
-                    placeholder = {
-                        Text(
-                            text = stringResource(R.string.search),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            style = MaterialTheme.typography.titleMedium.copy(
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Normal,
-                            ),
-                        )
-                    },
-                    visualTransformation = VisualTransformation.None,
-                    interactionSource = remember { MutableInteractionSource() },
-                    colors = textFieldColors(backgroundColor = Color.Transparent),
-                )
-            },
-        )
+                .fillMaxSize()
+                .padding(horizontal = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Search,
+                contentDescription = null,
+                tint = Color(0xFF8F92A1),
+                modifier = Modifier.size(20.dp),
+            )
 
-        if (!query.isNullOrEmpty()) {
-            IconButton(onClick = { onQueryChange("") }) {
-                Icon(
-                    imageVector = Icons.Outlined.Close,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Box(
+                modifier = Modifier.weight(1f),
+                contentAlignment = Alignment.CenterStart,
+            ) {
+                if (query.isNullOrEmpty()) {
+                    Text(
+                        text = stringResource(R.string.search),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color(0xFF8F92A1),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+
+                BasicTextField(
+                    value = query ?: "",
+                    onValueChange = onQueryChange,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(focusRequester),
+                    textStyle = MaterialTheme.typography.bodyMedium.copy(
+                        color = Color.White,
+                        fontWeight = FontWeight.Normal,
+                    ),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                    keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
+                    singleLine = true,
+                    cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
                 )
+            }
+
+            if (!query.isNullOrEmpty()) {
+                IconButton(
+                    onClick = { onQueryChange("") },
+                    modifier = Modifier.size(24.dp),
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Close,
+                        contentDescription = null,
+                        tint = Color(0xFF8F92A1),
+                        modifier = Modifier.size(18.dp),
+                    )
+                }
             }
         }
     }

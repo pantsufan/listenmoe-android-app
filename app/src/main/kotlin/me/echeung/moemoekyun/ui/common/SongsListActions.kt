@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import me.echeung.moemoekyun.R
 import me.echeung.moemoekyun.util.SortType
@@ -32,6 +33,7 @@ fun RowScope.SongsListActions(
         Icon(
             imageVector = Icons.AutoMirrored.Outlined.Sort,
             contentDescription = stringResource(R.string.sort),
+            tint = Color.White,
         )
 
         DropdownMenu(
@@ -69,6 +71,7 @@ fun RowScope.SongsListActions(
             Icon(
                 imageVector = Icons.Outlined.Shuffle,
                 contentDescription = stringResource(R.string.random_request),
+                tint = Color.White,
             )
         }
     }

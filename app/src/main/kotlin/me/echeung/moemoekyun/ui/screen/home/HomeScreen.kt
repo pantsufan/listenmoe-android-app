@@ -3,7 +3,6 @@ package me.echeung.moemoekyun.ui.screen.home
 import android.content.ComponentName
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -15,6 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -59,7 +59,7 @@ fun HomeScreen(
     LaunchedEffect(historyState) {
         val current = historyState
         if (current is HistoryState.Loaded) {
-            onShowHistory(current.songs, "https://listen.moe/music/history")
+            onShowHistory(current.songs, null)
             screenModel.resetHistoryState()
         }
     }
@@ -94,10 +94,10 @@ fun HomeScreen(
         content = { playerPadding ->
             Scaffold(
                 modifier = Modifier.nestedScroll(toolbarScrollBehavior.nestedScrollConnection),
+                containerColor = Color.Black,
                 topBar = {
                     HomeToolbar(
                         scrollBehavior = toolbarScrollBehavior,
-                        onNavigateAbout = onNavigateAbout,
                         onNavigateSettings = onNavigateSettings,
                     )
                 },
@@ -147,20 +147,10 @@ fun HomeScreen(
 }
 
 @Composable
-private fun HomeToolbar(
-    scrollBehavior: TopAppBarScrollBehavior,
-    onNavigateAbout: () -> Unit,
-    onNavigateSettings: () -> Unit,
-) {
+private fun HomeToolbar(scrollBehavior: TopAppBarScrollBehavior, onNavigateSettings: () -> Unit) {
     TopAppBar(
         title = {},
         actions = {
-            IconButton(onClick = onNavigateAbout) {
-                Icon(
-                    imageVector = Icons.Outlined.Info,
-                    contentDescription = stringResource(R.string.about),
-                )
-            }
             IconButton(onClick = onNavigateSettings) {
                 Icon(
                     imageVector = Icons.Outlined.Settings,

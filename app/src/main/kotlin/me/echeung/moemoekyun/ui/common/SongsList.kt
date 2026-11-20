@@ -27,6 +27,8 @@ fun LazyListScope.songsItems(
             },
         colors = ListItemDefaults.colors(
             containerColor = Color.Transparent,
+            headlineColor = Color.White,
+            supportingColor = MaterialTheme.colorScheme.secondary,
         ),
         supportingContent = {
             it.artists?.let { artists ->
@@ -37,6 +39,9 @@ fun LazyListScope.songsItems(
             }
         },
     ) {
-        Text(text = it.title)
+        Text(
+            text = it.title,
+            color = Color.White,
+        )
     }
 }

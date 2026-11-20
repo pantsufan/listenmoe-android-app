@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -122,7 +123,21 @@ fun UnauthedHomeContent(
                 )
             }
 
-            songsItems(songs = favorites, onShowSongs = onShowSongs)
+            if (!favorites.isNullOrEmpty()) {
+                songsItems(songs = favorites, onShowSongs = onShowSongs)
+            } else if (!query.isNullOrBlank()) {
+                item {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 32.dp),
+                        text = stringResource(R.string.no_results, query),
+                        textAlign = TextAlign.Center,
+                        color = Color(0xFF8F92A1),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                }
+            }
         }
     }
 }
@@ -149,6 +164,7 @@ private fun LocalFavoritesHeader(count: Int, onNavigateLogin: () -> Unit, modifi
                 Text(
                     text = stringResource(R.string.local_favorites),
                     style = MaterialTheme.typography.titleMedium,
+                    color = Color.White,
                 )
                 Text(
                     text = if (count == 1) {
@@ -157,7 +173,7 @@ private fun LocalFavoritesHeader(count: Int, onNavigateLogin: () -> Unit, modifi
                         stringResource(R.string.local_favorites_count, count)
                     },
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = Color(0xFF8F92A1),
                 )
             }
         }

@@ -142,6 +142,7 @@ fun PlayerScaffold(
             sheetShape = RoundedCornerShape(0.dp),
             sheetShadowElevation = 0.dp,
             sheetDragHandle = {},
+            containerColor = Color.Black,
             modifier = modifier,
             content = content,
         )
