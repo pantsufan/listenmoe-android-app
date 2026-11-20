@@ -108,27 +108,31 @@ fun PlayerScaffold(
                         .background(sheetBackground)
                         .then(expandProgress.measureModifier),
                 ) {
-                    ExpandedPlayerContent(
-                        radioState = radioState,
-                        playPauseButtonState = playPauseButtonState,
-                        visualizerState = visualizerState,
-                        isVisualizerEnabled = isVisualizerEnabled,
-                        onClickStation = onClickStation,
-                        onClickHistory = onClickHistory,
-                        toggleFavorite = toggleFavorite,
-                        onClickCollapse = { scope.launch { sheetState.partialExpand() } },
-                        modifier = Modifier.alpha(expandProgress.value),
-                    )
-                    CollapsedPlayerContent(
-                        radioState = radioState,
-                        playPauseButtonState = playPauseButtonState,
-                        toggleFavorite = toggleFavorite,
-                        bottomInset = bottomInset,
-                        onClick = { scope.launch { sheetState.expand() } },
-                        modifier = Modifier
-                            .align(Alignment.TopCenter)
-                            .alpha(1f - expandProgress.value),
-                    )
+                    if (expandProgress.value > 0f) {
+                        ExpandedPlayerContent(
+                            radioState = radioState,
+                            playPauseButtonState = playPauseButtonState,
+                            visualizerState = visualizerState,
+                            isVisualizerEnabled = isVisualizerEnabled,
+                            onClickStation = onClickStation,
+                            onClickHistory = onClickHistory,
+                            toggleFavorite = toggleFavorite,
+                            onClickCollapse = { scope.launch { sheetState.partialExpand() } },
+                            modifier = Modifier.alpha(expandProgress.value),
+                        )
+                    }
+                    if (expandProgress.value < 1f && !isSheetExpanded) {
+                        CollapsedPlayerContent(
+                            radioState = radioState,
+                            playPauseButtonState = playPauseButtonState,
+                            toggleFavorite = toggleFavorite,
+                            bottomInset = bottomInset,
+                            onClick = { scope.launch { sheetState.expand() } },
+                            modifier = Modifier
+                                .align(Alignment.TopCenter)
+                                .alpha(1f - expandProgress.value),
+                        )
+                    }
                 }
             },
             sheetContainerColor = Color.Transparent,
