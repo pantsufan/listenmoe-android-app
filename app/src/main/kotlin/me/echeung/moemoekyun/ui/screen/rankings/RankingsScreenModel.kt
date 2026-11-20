@@ -48,8 +48,9 @@ class RankingsScreenModel @Inject constructor(
     }
 
     fun toggleFavorite(songId: Int) {
+        val song = _state.value.songs.firstOrNull { it.song.id == songId }?.song
         viewModelScope.launchIO {
-            val favorited = favoriteSong.await(songId)
+            val favorited = favoriteSong.await(songId, song)
             _state.update { s ->
                 s.copy(
                     songs = s.songs.map {

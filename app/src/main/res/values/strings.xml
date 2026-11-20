@@ -100,6 +100,10 @@
 
     <string name="no_favorites">No favorites yet</string>
     <string name="filter_favorites">Filter favorites</string>
+    <string name="local_favorites">Local Favorites</string>
+    <string name="local_favorites_hint">Heart any song to save it locally</string>
+    <string name="local_favorites_count">%d songs saved on device</string>
+    <string name="local_favorites_count_single">1 song saved on device</string>
     <!-- e.g. Unfavorited <Song Title> -->
     <string name="unfavorited">Unfavorited %s</string>
     <!-- e.g. 2 queued -->

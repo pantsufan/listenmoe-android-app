@@ -129,8 +129,9 @@ class HomeScreenModel @Inject constructor(
     }
 
     fun toggleFavorite(songId: Int) {
+        val currentSong = radioState.value.currentSong?.takeIf { it.id == songId }
         viewModelScope.launchIO {
-            favoriteSong.await(songId)
+            favoriteSong.await(songId, currentSong)
         }
     }
 

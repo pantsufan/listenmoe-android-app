@@ -1,12 +1,9 @@
 package me.echeung.moemoekyun.ui.screen.home
 
 import android.content.ComponentName
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.TrendingUp
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -93,16 +90,13 @@ fun HomeScreen(
         onClickHistory = {
             screenModel.loadHistory()
         },
-        toggleFavorite = screenModel::toggleFavorite.takeIf { isAuthenticated },
+        toggleFavorite = screenModel::toggleFavorite,
         content = { playerPadding ->
             Scaffold(
                 modifier = Modifier.nestedScroll(toolbarScrollBehavior.nestedScrollConnection),
                 topBar = {
                     HomeToolbar(
                         scrollBehavior = toolbarScrollBehavior,
-                        isAuthenticated = isAuthenticated,
-                        onNavigateSearch = onNavigateSearch,
-                        onNavigateRankings = onNavigateRankings,
                         onNavigateAbout = onNavigateAbout,
                         onNavigateSettings = onNavigateSettings,
                     )
@@ -133,8 +127,16 @@ fun HomeScreen(
                         )
 
                         else -> UnauthedHomeContent(
+                            favorites = state.filteredFavorites,
+                            query = state.searchQuery,
+                            onQueryChange = screenModel::search,
+                            sortType = state.sortType,
+                            onSortBy = screenModel::sortBy,
+                            sortDescending = state.sortDescending,
+                            onSortDescending = screenModel::sortDescending,
                             onNavigateLogin = onNavigateLogin,
                             onNavigateRegister = onNavigateRegister,
+                            onShowSongs = { songs -> onShowHistory(songs, null) },
                             contentPadding = contentPadding,
                         )
                     }
@@ -147,33 +149,11 @@ fun HomeScreen(
 @Composable
 private fun HomeToolbar(
     scrollBehavior: TopAppBarScrollBehavior,
-    isAuthenticated: Boolean,
-    onNavigateSearch: () -> Unit,
-    onNavigateRankings: () -> Unit,
     onNavigateAbout: () -> Unit,
     onNavigateSettings: () -> Unit,
 ) {
     TopAppBar(
         title = {},
-        navigationIcon = {
-            if (isAuthenticated) {
-                Row {
-                    IconButton(onClick = onNavigateSearch) {
-                        Icon(
-                            imageVector = Icons.Outlined.Search,
-                            contentDescription = stringResource(R.string.search),
-                        )
-                    }
-
-                    IconButton(onClick = onNavigateRankings) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Outlined.TrendingUp,
-                            contentDescription = stringResource(R.string.rankings_title),
-                        )
-                    }
-                }
-            }
-        },
         actions = {
             IconButton(onClick = onNavigateAbout) {
                 Icon(

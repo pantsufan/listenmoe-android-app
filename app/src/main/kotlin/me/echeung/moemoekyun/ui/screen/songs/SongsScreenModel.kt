@@ -45,8 +45,9 @@ class SongsScreenModel @AssistedInject constructor(
     }
 
     fun toggleFavorite(songId: Int) {
+        val song = _state.value.songs.find { it.id == songId }
         viewModelScope.launchIO {
-            val favorited = favoriteSong.await(songId)
+            val favorited = favoriteSong.await(songId, song)
 
             _state.update { state ->
                 state.copy(

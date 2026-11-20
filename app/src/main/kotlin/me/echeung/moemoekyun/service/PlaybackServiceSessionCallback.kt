@@ -235,8 +235,9 @@ class PlaybackServiceSessionCallback @AssistedInject constructor(
 
     private fun toggleFavoriteSong() {
         scope.launchIO {
-            radioService.state.value.currentSong?.id?.let {
-                favoriteSong.await(it)
+            val song = radioService.state.value.currentSong
+            song?.id?.let {
+                favoriteSong.await(it, song)
             }
         }
     }

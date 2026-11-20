@@ -83,18 +83,18 @@ fun SongDetails(
         Section(R.string.song_album, song.albums)
         Section(R.string.song_source, song.sources)
 
-        if (actionsEnabled) {
-            Row(
-                modifier = Modifier.padding(top = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+        Row(
+            modifier = Modifier.padding(top = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            OutlinedButton(
+                modifier = Modifier.weight(1f),
+                onClick = { toggleFavorite(song.id) },
             ) {
-                OutlinedButton(
-                    modifier = Modifier.weight(1f),
-                    onClick = { toggleFavorite(song.id) },
-                ) {
-                    Text(stringResource(if (song.favorited) R.string.action_unfavorite else R.string.action_favorite))
-                }
+                Text(stringResource(if (song.favorited) R.string.action_unfavorite else R.string.action_favorite))
+            }
 
+            if (actionsEnabled) {
                 OutlinedButton(
                     modifier = Modifier.weight(1f),
                     onClick = { request(song) },

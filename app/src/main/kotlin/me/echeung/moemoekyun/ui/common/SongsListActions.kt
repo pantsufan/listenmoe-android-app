@@ -23,7 +23,7 @@ fun RowScope.SongsListActions(
     onSortBy: (SortType) -> Unit,
     sortDescending: Boolean,
     onSortDescending: (Boolean) -> Unit,
-    requestRandomSong: () -> Unit,
+    requestRandomSong: (() -> Unit)? = null,
     sortTypes: List<SortType> = listOf(SortType.TITLE, SortType.ARTIST),
 ) {
     var showSortMenu by remember { mutableStateOf(false) }
@@ -64,10 +64,12 @@ fun RowScope.SongsListActions(
         }
     }
 
-    IconButton(onClick = requestRandomSong) {
-        Icon(
-            imageVector = Icons.Outlined.Shuffle,
-            contentDescription = stringResource(R.string.random_request),
-        )
+    if (requestRandomSong != null) {
+        IconButton(onClick = requestRandomSong) {
+            Icon(
+                imageVector = Icons.Outlined.Shuffle,
+                contentDescription = stringResource(R.string.random_request),
+            )
+        }
     }
 }

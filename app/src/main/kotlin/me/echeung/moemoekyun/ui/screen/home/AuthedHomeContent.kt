@@ -184,14 +184,14 @@ private fun UserInfo(user: DomainUser, onClickLogOut: () -> Unit) {
 }
 
 @Composable
-private fun FavoritesToolbar(
+internal fun FavoritesToolbar(
     query: String?,
     onQueryChange: (String) -> Unit,
     sortType: SortType,
     onSortBy: (SortType) -> Unit,
     sortDescending: Boolean,
     onSortDescending: (Boolean) -> Unit,
-    requestRandomSong: () -> Unit,
+    requestRandomSong: (() -> Unit)? = null,
 ) {
     Row(
         modifier = Modifier

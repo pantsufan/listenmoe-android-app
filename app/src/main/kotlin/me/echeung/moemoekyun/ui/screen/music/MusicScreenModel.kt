@@ -21,6 +21,7 @@ import me.echeung.moemoekyun.client.api.SearchResult
 import me.echeung.moemoekyun.client.api.data.transform
 import me.echeung.moemoekyun.domain.radio.interactor.GetCurrentStation
 import me.echeung.moemoekyun.domain.songs.interactor.FavoriteSong
+import me.echeung.moemoekyun.domain.songs.interactor.GetFavoriteSongs
 import me.echeung.moemoekyun.domain.songs.interactor.RequestSong
 import me.echeung.moemoekyun.domain.songs.model.DomainSong
 import me.echeung.moemoekyun.domain.songs.model.SongConverter
@@ -35,6 +36,7 @@ class MusicScreenModel @Inject constructor(
     private val searchApiClient: SearchApiClient,
     private val songConverter: SongConverter,
     private val favoriteSong: FavoriteSong,
+    private val getFavoriteSongs: GetFavoriteSongs,
     private val requestSong: RequestSong,
     private val getAuthenticatedUser: GetAuthenticatedUser,
     private val getCurrentStation: GetCurrentStation,
@@ -105,8 +107,9 @@ class MusicScreenModel @Inject constructor(
     }
 
     fun toggleFavorite(songId: Int) {
+        val song = (_state.value.searchSongs + _state.value.latestSongs).find { it.id == songId }
         viewModelScope.launchIO {
-            val favorited = favoriteSong.await(songId)
+            val favorited = favoriteSong.await(songId, song)
             _state.update { s ->
                 s.copy(
                     latestSongs = s.latestSongs.map { if (it.id == songId) it.copy(favorited = favorited) else it },
@@ -171,8 +174,10 @@ class MusicScreenModel @Inject constructor(
         }
     }
 
-    private fun LatestSongsQuery.Song.toDomainSong() = songConverter.toDomainSong(transform())
-    private fun SearchResult.toDomainSong() = songConverter.toDomainSong(transform())
+    private fun LatestSongsQuery.Song.toDomainSong() =
+        songConverter.toDomainSong(transform()).let { it.copy(favorited = getFavoriteSongs.isFavorite(it.id)) }
+    private fun SearchResult.toDomainSong() =
+        songConverter.toDomainSong(transform()).let { it.copy(favorited = getFavoriteSongs.isFavorite(it.id)) }
 
     private fun kpopOptional(): Optional<Boolean?> {
         val isKpop = getCurrentStation.isKpop()
